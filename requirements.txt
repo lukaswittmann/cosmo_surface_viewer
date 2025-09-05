@@ -1,0 +1,5 @@
+numpy>=1.20
+matplotlib>=3.3
+scipy>=1.6
+pyvista>=0.39
+vtk>=9.1

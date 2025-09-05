@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cosmo-surface-viewer"
+version = "1.0.0"
+description = "Build colored COSMO/CPCM surfaces from CPCM surface charges using ORCA .cpcm files."
+requires-python = ">=3.9"
+dependencies = [
+  "numpy>=1.20",
+  "matplotlib>=3.3",
+  "scipy>=1.6",
+  "pyvista>=0.39",
+  "vtk>=9.1",
+]
+readme = "README.md"
+authors = [{ name = "Lukas Wittmann", email = "mail@lukaswittmann.com" }]
+
+[project.scripts]
+cosmo-render = "cosmo_surface_viewer.cli:entry_point"
+
+[tool.setuptools]
+packages = ["cosmo_surface_viewer"]
