@@ -20,7 +20,7 @@ Features
 </tr>
 </table>
 
-Quick Start
+### Quick Start
 - Python 3.9+
 - Create a virtual environment and install requirements:
 
@@ -32,7 +32,7 @@ Quick Start
 
   - `python cosmo_render.py`
 
-CLI Usage
+### CLI Usage
 - Show all options: `python cosmo_render.py --help`
 
 Common flags
@@ -42,7 +42,7 @@ Common flags
 - `--onscreen`: use on‑screen rendering (off‑screen by default)
 - `-v` / `-vv`: increase verbosity
 
-Examples
+### Examples
 - Small halides in water: You can see the change in the sigma hole in those images.
 
 <table>
@@ -64,16 +64,16 @@ Examples
 
 <img src="https://raw.githubusercontent.com/lukaswittmann/cosmo_surface_viewer/refs/heads/main/examples/aspatric_acid_scf.gif" alt="CH3Br in water" width="420"/>
 
-Using VRML with other software
+### Using VRML with other software
 - The generated `.wrl` files can be opened in, e.g., UCSF Chimera for interactive viewing alongside molecular structures (e.g., an `.xyz` or PDB file). Chimera project: https://www.cgl.ucsf.edu/chimera/
 
-Packaging (optional)
+### Packaging (optional)
 - A minimal `pyproject.toml` is included. Install editable and use the console script:
 
   - `pip install -e .`
   - Run: `cosmo-render --help`
 
-Notes
+### Notes
 - Off‑screen rendering requires a working VTK/PyVista setup; depending on your platform
   you may need system OpenGL or OSMesa. If off‑screen fails, try `--onscreen`.
 - Output directories are created automatically.
