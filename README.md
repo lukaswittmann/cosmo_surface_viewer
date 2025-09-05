@@ -62,7 +62,7 @@ Examples
 
 - Aspartic acid surface charges during SCF iterations:
 
-  ![Aspartic acid SCF iterations](https://raw.githubusercontent.com/lukaswittmann/cosmo_surface_viewer/refs/heads/main/examples/aspatric_acid_scf.gif)
+<img src="https://raw.githubusercontent.com/lukaswittmann/cosmo_surface_viewer/refs/heads/main/examples/aspatric_acid_scf.gif" alt="CH3Br in water" width="420"/>
 
 Using VRML with other software
 - The generated `.wrl` files can be opened in, e.g., UCSF Chimera for interactive viewing alongside molecular structures (e.g., an `.xyz` or PDB file). Chimera project: https://www.cgl.ucsf.edu/chimera/
