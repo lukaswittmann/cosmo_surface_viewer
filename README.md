@@ -4,7 +4,7 @@
 
 # COSMO Surface Viewer
 
-Build colored surface charge surfaces from ORCA's `.cpcm` files and view or render them.
+Build colored surface charge or potential surfaces from ORCA's `.cpcm` files and view or render them.
 
 Features
 - Parses `.cpcm` to points, potentials, areas, and sphere owners
@@ -14,8 +14,8 @@ Features
 
 </td>
 <td style="vertical-align: middle; padding-left: 20px;">
-  <img src="examples/succinic_acid_in_water.png" alt="Surface charges of succinic acid in water" width="300"/>
-  <p style="text-align:center; font-style: italic; margin-top:8px;">Succinic acid in water</p>
+  <img src="examples/succinic_acid_in_water.png" alt="Surface charges of succinic acid in water" width="360"/>
+  <p style="text-align:center; font-style: italic; margin-top:8px;">Surface charges of succinic acid in water</p>
 </td>
 </tr>
 </table>
@@ -40,10 +40,6 @@ Common flags
 - `--output`: directory for `.wrl` and `.png` files (default: `output`)
 - `--force`: rebuild and re‑render even if outputs exist
 - `--onscreen`: use on‑screen rendering (off‑screen by default)
-- `--vmin/--vmax`: color range; `--robust`+`--robust-pct` to auto‑clip percentiles
-- `--cmap`: Matplotlib colormap (e.g., `jet`, `viridis`, `turbo`)
-- `--neighbor-radius`, `--max-neighbors`, `--neighbors-threshold`: mesh construction controls
-- `--window-width`, `--window-height`, `--background`, `--smooth-shading`, `--no-aa`
 - `-v` / `-vv`: increase verbosity
 
 Examples
@@ -66,7 +62,7 @@ Examples
 
 - Aspartic acid surface charges during SCF iterations:
 
-  ![Aspartic acid SCF iterations](examples/aspartic_acid_scf.gif)
+  ![Aspartic acid SCF iterations](https://raw.githubusercontent.com/lukaswittmann/cosmo_surface_viewer/refs/heads/main/examples/aspatric_acid_scf.gif)
 
 Using VRML with other software
 - The generated `.wrl` files can be opened in, e.g., UCSF Chimera for interactive viewing alongside molecular structures (e.g., an `.xyz` or PDB file). Chimera project: https://www.cgl.ucsf.edu/chimera/
