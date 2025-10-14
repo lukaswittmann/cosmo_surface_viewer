@@ -31,18 +31,21 @@ def test_parse_cpcm(tmp_path):
     content.append('hdr1\n')
     content.append('hdr2\n')
     # three data lines, ensure at least 10 columns
-    content.append('0.0 0.0 0.0 0.1 0 0.5 0 0 0 1\n')
-    content.append('1.0 0.0 0.0 0.1 0 0.6 0 0 0 1\n')
-    content.append('0.0 1.0 0.0 0.1 0 0.7 0 0 0 1\n')
+    content.append('0.0 0.0 0.0 0.1 0.2 0.5 0 0 0 1\n')
+    content.append('1.0 0.0 0.0 0.1 0.3 0.6 0 0 0 1\n')
+    content.append('0.0 1.0 0.0 0.1 0.4 0.7 0 0 0 1\n')
     sample.write_text(''.join(content))
 
-    points, potentials, areas, owners = cosmo.parse_cpcm(sample)
+    points, charges, potentials, areas, owners = cosmo.parse_cpcm(sample)
     assert points.shape == (3, 3)
+    assert charges.shape == (3,)
     assert potentials.shape == (3,)
     assert areas.shape == (3,)
     assert owners.shape == (3,)
     # spot check values
     assert np.isclose(points[0, 0], 0.0)
+    assert np.isclose(charges[1], 0.6)
+    assert np.isclose(potentials[2], 0.4)
     assert owners.dtype == int
 
 

@@ -39,12 +39,13 @@ def parse_vrml_colors(filename: Path | str) -> np.ndarray:
     return colors_array
 
 
-def parse_cpcm(input_file: Path | str) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    """Parse a .cpcm file and return points, potentials, areas, owners.
+def parse_cpcm(input_file: Path | str) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Parse a .cpcm file and return points, effective charges, potentials, areas, owners.
 
     Returns:
     - points: (N,3) in Angstrom
-    - potentials: (N,) effective charges/potentials
+    - charges: (N,) effective charges
+    - potentials: (N,) potentials
     - surface_areas: (N,)
     - sphere_owners: (N,) int
     """
@@ -66,6 +67,7 @@ def parse_cpcm(input_file: Path | str) -> Tuple[np.ndarray, np.ndarray, np.ndarr
         raise ValueError("SURFACE POINTS section not found or malformed in .cpcm")
 
     points = []
+    charges = []
     potentials = []
     surface_areas = []
     sphere_owners = []
@@ -76,18 +78,21 @@ def parse_cpcm(input_file: Path | str) -> Tuple[np.ndarray, np.ndarray, np.ndarr
         x, y, z = map(float, parts[0:3])
         area = float(parts[3])
         effective_charge = float(parts[5])
+        potential = float(parts[4])
         owner = int(parts[9])
 
         points.append([x, y, z])
         surface_areas.append(area)
-        potentials.append(effective_charge)
+        charges.append(effective_charge)
+        potentials.append(potential)
         sphere_owners.append(owner)
 
     points = np.array(points, dtype=float)
+    charges = np.array(charges, dtype=float)
     potentials = np.array(potentials, dtype=float)
     surface_areas = np.array(surface_areas, dtype=float)
     sphere_owners = np.array(sphere_owners, dtype=int)
 
     # Convert atomic units to Angstroms
     points *= 0.529177
-    return points, potentials, surface_areas, sphere_owners
+    return points, charges, potentials, surface_areas, sphere_owners

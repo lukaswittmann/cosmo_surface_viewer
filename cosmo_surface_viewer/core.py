@@ -22,6 +22,8 @@ def setup_logging(verbosity: int) -> None:
 
 
 from .parsers import parse_cpcm, parse_vrml_colors
+
+ANGSTROM_PER_BOHR = 0.529177
 from .mesh import build_faces, map_colors
 from .io import write_vrml
 from .render import render_wrl_to_png
@@ -33,7 +35,7 @@ def process_all(
    input: os.PathLike | str,
    output: os.PathLike | str,
    *,
-   color_by: str = "surface-charge",
+   color_by: str = "charge",
    force: bool = False,
    off_screen: bool = True,
    neighbor_radius: float = 1.0,
@@ -64,7 +66,7 @@ def process_all(
       if not os.path.exists(wrl_path) or force:
          print(f"[{idx}/{total_cpcm}] Building .wrl from: {fname}")
          logger.info("[WRL] Building: %s", fname)
-         points, potentials, areas, owners = parse_cpcm(in_path)
+         points, charges, potentials, areas, owners = parse_cpcm(in_path)
          faces = build_faces(
             points,
             areas,
@@ -73,11 +75,16 @@ def process_all(
             max_neighbors=max_neighbors,
             neighbors_threshold=neighbors_threshold,
          )
-         # Choose coloring values: default is surface-charge (effective charge * area)
-         if str(color_by).lower().startswith("surface"):
-            values = potentials * areas
-         else:
+         mode = str(color_by).lower()
+         if mode in {"potential", "potentials"}:
             values = potentials
+         elif mode in {"charge", "charges"}:
+            values = charges
+         elif mode in {"surface-charge", "surface_charge", "sigma"}:
+            area_bohr = areas / (ANGSTROM_PER_BOHR ** 2)
+            values = charges * area_bohr
+         else:
+            raise ValueError(f"Unsupported color_by option: {color_by}")
          colors = map_colors(values, vmin=vmin, vmax=vmax, cmap_name=cmap, robust=robust, robust_pct=robust_pct)
          write_vrml(points, faces, colors, wrl_path)
       else:
@@ -127,7 +134,13 @@ def main(argv: Iterable[str] | None = None) -> int:
 
    parser.add_argument("--vmin", type=float, default=None, help="Lower bound for color mapping")
    parser.add_argument("--vmax", type=float, default=None, help="Upper bound for color mapping")
-   parser.add_argument("--color-by", type=str, choices=["potential","surface-charge"], default="surface-charge", help="Color by 'potential' or 'surface-charge' (default)")
+   parser.add_argument(
+      "--color-by",
+      type=str,
+      choices=["charge", "potential", "surface-charge"],
+      default="charge",
+      help="Color by 'charge' (default), 'potential', or 'surface-charge' (charge×area)",
+   )
    parser.add_argument("--cmap", type=str, default="jet", help="Matplotlib colormap name (e.g., jet, viridis, turbo)")
    parser.add_argument("--robust", action="store_true", help="Use percentile clipping when vmin/vmax not provided")
    parser.add_argument("--robust-pct", type=float, default=1.0, help="Percentile for robust clipping (e.g., 1.0 → [1,99])")
