@@ -25,7 +25,7 @@ from .parsers import parse_cpcm, parse_vrml_colors
 
 ANGSTROM_PER_BOHR = 0.529177
 from .mesh import build_faces, map_colors
-from .io import write_vrml
+from .io import write_vrml, write_pqr
 from .render import render_wrl_to_png
 
 logger = logging.getLogger("cosmo_surface_viewer")
@@ -62,6 +62,8 @@ def process_all(
    for idx, fname in enumerate(cpcm_files, start=1):
       in_path = os.path.join(input, fname)
       wrl_path = os.path.join(output, fname.replace(".cpcm", ".wrl"))
+      pqr_charge_path = os.path.join(output, fname.replace(".cpcm", "_charge.pqr"))
+      pqr_potential_path = os.path.join(output, fname.replace(".cpcm", "_potential.pqr"))
 
       if not os.path.exists(wrl_path) or force:
          print(f"[{idx}/{total_cpcm}] Building .wrl from: {fname}")
@@ -87,6 +89,11 @@ def process_all(
             raise ValueError(f"Unsupported color_by option: {color_by}")
          colors = map_colors(values, vmin=vmin, vmax=vmax, cmap_name=cmap, robust=robust, robust_pct=robust_pct)
          write_vrml(points, faces, colors, wrl_path)
+         
+         # Write PQR files with charge and potential
+         print(f"[{idx}/{total_cpcm}] Writing PQR files for: {fname}")
+         write_pqr(points, charges, pqr_charge_path)
+         write_pqr(points, potentials, pqr_potential_path)
       else:
          print(f"[{idx}/{total_cpcm}] Skipping (exists): {fname}")
          logger.info("[WRL] Exists:   %s", fname)

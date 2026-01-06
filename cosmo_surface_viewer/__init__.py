@@ -4,7 +4,7 @@ Expose core functions for importable API.
 """
 from .parsers import parse_cpcm, parse_vrml_colors
 from .mesh import build_faces, map_colors
-from .io import write_vrml
+from .io import write_vrml, write_pqr
 from .render import render_wrl_to_png
 from .core import process_all, main
 
@@ -17,6 +17,7 @@ __all__ = [
     "build_faces",
     "map_colors",
     "write_vrml",
+    "write_pqr",
     "render_wrl_to_png",
     "process_all",
     "main",

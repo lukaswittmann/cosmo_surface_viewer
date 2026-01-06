@@ -7,6 +7,24 @@ import logging
 logger = logging.getLogger("cosmo_surface_viewer.io")
 
 
+def write_pqr(points: np.ndarray, values: np.ndarray, filename: Path | str, radius: float = 0.300) -> None:
+    """Write points and values to PQR format file.
+    
+    Args:
+        points: (N,3) array of coordinates in Angstroms
+        values: (N,) array of values (charges or potentials)
+        filename: Output PQR filename
+        radius: Radius value for each point (default 0.300)
+    """
+    p = Path(filename)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with open(p, "w", encoding="utf-8") as f:
+        for i, (point, value) in enumerate(zip(points, values), start=1):
+            # GRIDPOINT index SPH CSP A 1 x y z value radius
+            f.write(f"ATOM {i:6d} SPH  CSP A    1    {point[0]:8.3f}{point[1]:8.3f}{point[2]:8.3f} {value:8.4f} {radius:6.3f}\n")
+    logger.info("Wrote PQR: %s", str(p))
+
+
 def write_vrml(vertices: np.ndarray, faces: np.ndarray, colors: np.ndarray, filename: Path | str) -> None:
     p = Path(filename)
     p.parent.mkdir(parents=True, exist_ok=True)
